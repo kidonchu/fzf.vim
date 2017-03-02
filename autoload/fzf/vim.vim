@@ -701,8 +701,12 @@ endfunction
 " query, [[tag commands], options]
 function! fzf#vim#buffer_tags(query, ...)
   let args = copy(a:000)
+  let type = &filetype
+  if type == 'javascript'
+	  let type = 'js'
+  endif
   let tag_cmds = (len(args) > 1 && type(args[0]) != type({})) ? remove(args, 0) : [
-    \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s 2>/dev/null', &filetype, expand('%:S')),
+    \ printf('ctags -f - --sort=no --excmd=number --language-force=%s %s 2>/dev/null', type, expand('%:S')),
     \ printf('ctags -f - --sort=no --excmd=number %s 2>/dev/null', expand('%:S'))]
   if type(tag_cmds) != type([])
     let tag_cmds = [tag_cmds]
